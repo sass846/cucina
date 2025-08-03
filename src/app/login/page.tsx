@@ -92,7 +92,7 @@ export default function LoginPage() {
       {/* <div>
       </div> */}
 
-      <div className="w-80 mx-auto mt-10 p-8 bg-gray-950 rounded shadow">
+      <div className="w-80 mx-auto mt-10 p-8 bg-background rounded shadow">
         <p className="text-2xl font-bold mb-6 text-center">Log In</p>
 
         <form className="flex flex-col gap-4" onSubmit={handleEmailLogin}>
@@ -107,7 +107,7 @@ export default function LoginPage() {
           placeholder="amazingchef@cucina.com"
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="border border-border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent-secondary"
           />
         </div>
 
@@ -122,7 +122,7 @@ export default function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
           required
           minLength={8}
-          className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="border border-border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent-secondary"
           />
         </div>
 
@@ -140,7 +140,7 @@ export default function LoginPage() {
         )}
 
         <div className="mb-6 text-right">
-            <button type="button" onClick={handlePasswordReset} className="text-sm font-medium text-orange-600 hover:underline">
+            <button type="button" onClick={handlePasswordReset} className="text-sm font-medium text-text-primary hover:underline">
               Forgot password?
             </button>
           </div>
@@ -149,7 +149,7 @@ export default function LoginPage() {
         <button 
           type="submit" 
           disabled={isLoading} 
-          className="bg-orange-600 text-white py-2 rounded font-semibold hover:bg-orange-700 transition disabled:opacity-50"
+          className="bg-accent-primary text-text-primary py-2 rounded font-semibold hover:bg-orange-500 transition disabled:opacity-50"
         >
           {isLoading ? "Processing..." : "Log In with Email"}
         </button>
@@ -163,7 +163,7 @@ export default function LoginPage() {
         <div className="flex justify-center">
         <button 
           aria-label="Sign up with Google" 
-          className="flex items-center gap-2 border border-orange-500 px-4 py-2 rounded hover:bg-gray-100 hover:text-orange-600 transition"
+          className="flex items-center gap-2 border border-accent-primary px-4 py-2 rounded hover:bg-gray-100 hover:text-accent-primary transition"
           onClick={handleGoogleLogin}
           disabled={isLoading}
         >

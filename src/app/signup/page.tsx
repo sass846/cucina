@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { auth } from "@/lib/firebase"
+import { auth, db } from "@/lib/firebase"
 import { useRouter } from "next/navigation";
 import { 
   createUserWithEmailAndPassword,
@@ -9,8 +9,10 @@ import {
   sendEmailVerification,
   GoogleAuthProvider
 } from "firebase/auth";
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
+import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore"
+
 
 export default function SignUpPage() {
   const [email, setEmail] = useState('');
@@ -39,13 +41,21 @@ export default function SignUpPage() {
 
     try{
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
       
-      if(userCredential.user){
-        await sendEmailVerification(userCredential.user);
-      }
+      // await setDoc(doc(db, "users", user.uid), {
+      //   uid: user.uid,
+      //   email: user.email,
+      //   displayName: user.email?.split('@')[0],
+      //   photoURL: '',
+      //   createdAt: serverTimestamp(),
+      //   bio: ''
+      // });
 
+  
+      await sendEmailVerification(user);
       setMessage("Account created! Please check your email to verify your account")
-      router.push('/');
+      router.push('/create-profile');
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -63,7 +73,23 @@ export default function SignUpPage() {
     const provider = new GoogleAuthProvider();
     try{
       await signInWithPopup(auth, provider);
-      router.push('/');
+      // const user = result.user;
+
+      // const userDocRef = doc(db, "users", user.uid);
+      // const userDoc = await getDoc(userDocRef);
+
+      // if(!userDoc.exists()){
+      //   await setDoc(doc(db, "users", user.uid), {
+      //     uid: user.uid,
+      //     email: user.email,
+      //     displayName: user.displayName,
+      //     photoURL: user.photoURL,
+      //     createdAt: serverTimestamp(),
+      //     bio: ''
+      //   });
+      // }
+      
+      router.push('/create-profile');
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -81,7 +107,7 @@ export default function SignUpPage() {
       {/* <div>
       </div> */}
 
-      <div className="w-80 mx-auto mt-10 p-8 bg-gray-950 rounded shadow">
+      <div className="w-80 mx-auto mt-10 p-8 bg-background rounded shadow">
         <p className="text-2xl font-bold mb-6 text-center">Sign Up</p>
 
         <form className="flex flex-col gap-4" onSubmit={handleEmailSignUp}>
@@ -96,7 +122,7 @@ export default function SignUpPage() {
           placeholder="amazingchef@cucina.com"
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="border border-border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent-secondary"
           />
         </div>
 
@@ -111,7 +137,7 @@ export default function SignUpPage() {
           onChange={(e) => setPassword(e.target.value)}
           required
           minLength={8}
-          className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="border border-border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent-secondary"
           />
         </div>
 
@@ -132,7 +158,7 @@ export default function SignUpPage() {
         <button 
           type="submit" 
           disabled={isLoading} 
-          className="bg-orange-600 text-white py-2 rounded font-semibold hover:bg-orange-700 transition disabled:opacity-50"
+          className="bg-accent-primary text-text-primary py-2 rounded font-semibold hover:bg-orange-500 transition disabled:opacity-50"
         >
           {isLoading ? "Processing..." : "Sign Up with Email"}
         </button>
@@ -146,7 +172,7 @@ export default function SignUpPage() {
         <div className="flex justify-center">
         <button 
           aria-label="Sign up with Google" 
-          className="flex items-center gap-2 border border-orange-500 px-4 py-2 rounded hover:bg-gray-100 hover:text-orange-600 transition"
+          className="flex items-center gap-2 border border-accent-primary px-4 py-2 rounded hover:bg-gray-100 hover:text-accent-primary transition"
           onClick={handleGoogleSignup}
           disabled={isLoading}
         >

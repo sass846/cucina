@@ -1,26 +1,80 @@
-@import "tailwindcss";
-
+/* @import "tailwindcss";
+/* @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Nunito+Sans:wght@400;700&display=swap'); */
+/* 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-background: #F7F5F2;
+  --color-text-primary: #3D3D3D;
+  --color-border: #D1D1D1;
+  --color-accent-primary: #E87A5D;
+  --color-accent-secondary: #A3B8A3;
+
+  --font-heading: 'Lora', serif;
+  --font-body: 'Nunito Sans', sans-serif;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-background: #F7F5F2;
+  --color-text-primary: #3D3D3D;
+  --color-border: #D1D1D1;
+  --color-accent-primary: #E87A5D;
+  --color-accent-secondary: #A3B8A3;
 
-@media (prefers-color-scheme: dark) {
+  --font-heading: 'Lora', serif;
+  --font-body: 'Nunito Sans', sans-serif;
+} */
+
+/* @theme {
+  --font-heading: var(--font-lora);
+  --font-sans: var(--font-nunito-sans);
+} */
+
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
-body {
+/* body {
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+} */
+
+/* body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+} */
+
+
+@import "tailwindcss";
+/* @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Nunito+Sans:wght@400;700&display=swap'); */
+
+/* Tailwind theme variables */
+@theme inline {
+  --color-background: #F7F5F2;
+  --color-text-primary: #3D3D3D;
+  --color-border: #D1D1D1;
+  --color-accent-primary: #E87A5D;
+  --color-accent-secondary: #A3B8A3;
+
+  --font-heading: 'Lora', serif;
+  --font-body: 'Nunito Sans', sans-serif;
+}
+
+/* @media (prefers-color-scheme: dark) {
+  @theme inline {
+    --color-background: #0a0a0a;
+    --color-text-primary: #ededed;
+    --color-border: #444;
+    --color-accent-primary: #e385ae;
+    --color-accent-secondary: #92c7a3;
+  }
+} */
+
+body {
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
 }
