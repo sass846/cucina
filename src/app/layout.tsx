@@ -47,8 +47,8 @@ export default function RootLayout({
         className={`${lora.variable} ${nunitoSans.variable} antialiased`}
       >
         <AuthProvider>
+          <Navbar/>
           {children}
-         <Navbar/>
         {/* <SignUpPage/>
         <LoginPage/>
         <CreateProfilePage/>
