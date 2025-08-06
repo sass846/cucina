@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { auth } from "@/lib/firebase"
+import { auth, db } from "@/lib/firebase"
+import { doc, getDoc } from "firebase/firestore";
 
 export default function CreatePost() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -37,10 +38,28 @@ function CreatePostModal({ onClose } : { onClose: () => void}) {
   const [postText, setPostText] = useState('');
   const [postImage, setPostImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [communities, setCommunities] = useState<string[]>([]);
+  const [selectedCommunity, setSelectedCommunity] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(()=>{
+    const fetchUserCommunities = async () => {
+      if(user){
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+        if(userDoc.exists() && userDoc.data().joinedCommunities){
+          const userCommunities = userDoc.data().joinedCommunities;
+          setCommunities(userCommunities);
+          if(userCommunities.length()>0){
+            setSelectedCommunity(userCommunities[0]);
+          }
+        }
+      }
+    };
+  }, [user]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if(e.target.files && e.target.files[0]) {
@@ -61,6 +80,11 @@ function CreatePostModal({ onClose } : { onClose: () => void}) {
       return;
     }
 
+    if(!selectedCommunity){
+      setError("Select a community to post in");
+      return;
+    }
+
     setIsSubmitting(false);
     setError(null);
 
@@ -70,7 +94,7 @@ function CreatePostModal({ onClose } : { onClose: () => void}) {
       const formData = new FormData();
       formData.append('title', title);
       formData.append('description', postText);
-      formData.append('communityId', 'general');
+      formData.append('communityId', selectedCommunity);
       if(postImage) {
         formData.append('image', postImage);
       }
@@ -111,6 +135,26 @@ function CreatePostModal({ onClose } : { onClose: () => void}) {
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
+            <label htmlFor="community" className="mb-2 block text-sm font-bold">Community</label>
+            <select
+            name="community"
+            id="community"
+            value={selectedCommunity}
+            onChange={(e) => {setSelectedCommunity(e.target.value)}}
+            className="w-full rounded-md border-border p-3 shadow-sm focus:border-accent-primary focus:ring-accent-primary"
+            >
+
+              {communities.length>0 ? (
+                communities.map(community => (
+                  <option key={community} value={community}>{community}</option>
+                ))
+              ) : (
+                <option disabled>You haven&apos;t joined any communities yet.</option>
+              )}
+            </select>
+          </div>
+
+          <div className="mb-4">
             <label htmlFor="title" className="mb-2 block text-sm font-bold">Title</label>
             <input
               type="text"
@@ -118,7 +162,7 @@ function CreatePostModal({ onClose } : { onClose: () => void}) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g., My Perfect Sourdough Loaf"
-              className="w-full rounded-md border-[--color-border] p-3 shadow-sm focus:border-[--color-accent-primary] focus:ring-[--color-accent-primary]"
+              className="w-full rounded-md border-border p-3 shadow-sm focus:border-accent-primary focus:ring-accent-primary"
             />
           </div>
 
@@ -130,7 +174,7 @@ function CreatePostModal({ onClose } : { onClose: () => void}) {
               onChange={(e) => setPostText(e.target.value)}
               placeholder="Share the story, recipe, or details behind your creation..."
               rows={5}
-              className="w-full rounded-md border-[--color-border] p-3 shadow-sm focus:border-[--color-accent-primary] focus:ring-[--color-accent-primary]"
+              className="w-full rounded-md border-border p-3 shadow-sm focus:border-accent-primary focus:ring-accent-primary"
             />
           </div>
 
@@ -145,7 +189,7 @@ function CreatePostModal({ onClose } : { onClose: () => void}) {
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="text-sm font-semibold text-[--color-accent-primary] hover:underline"
+              className="text-sm font-semibold text-accent-primary hover:underline"
             >
               Add Photo
             </button>
@@ -159,7 +203,7 @@ function CreatePostModal({ onClose } : { onClose: () => void}) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="rounded-md bg-[--color-accent-primary] px-6 py-2 font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-md bg-accent-primary px-6 py-2 font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSubmitting ? 'Posting...' : 'Post'}
             </button>
