@@ -47,12 +47,13 @@ export default function RootLayout({
         className={`${lora.variable} ${nunitoSans.variable} antialiased`}
       >
         <AuthProvider>
-          <Navbar/>
-          {children}
-        {/* <SignUpPage/>
-        <LoginPage/>
-        <CreateProfilePage/>
-        <CreatePost/> */}
+          <div className="flex min-h-screen">
+            <Navbar/>
+            <main className="flex-grow">
+              {children}
+            </main>
+          </div>
+          
         </AuthProvider>
       </body>
     </html>

@@ -57,7 +57,7 @@ export default function CreateCommunityPage() {
       const token = await user.getIdToken();
   
       //make api call
-      const response = await fetch('api/communities/create', {
+      const response = await fetch('/api/communities/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -141,7 +141,7 @@ export default function CreateCommunityPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="rounded-md bg-[--color-accent-primary] px-6 py-3 font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-md bg-accent-primary px-6 py-3 font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isSubmitting ? 'Creating...' : 'Create Community'}
               </button>

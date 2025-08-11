@@ -55,7 +55,7 @@ export async function POST(request: Request) {
 
     await communityRef.set(newCommunity);
 
-    const userRef = db.collection("user").doc("uid");
+    const userRef = db.collection("users").doc(uid);
     await userRef.update({
       joinedCommunities: admin.firestore.FieldValue.arrayUnion(name),
     });

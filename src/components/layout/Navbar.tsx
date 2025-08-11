@@ -1,23 +1,18 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/components/auth/AuthProvider";
-import { auth, db } from "@/lib/firebase";
-import { signOut } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { useAuth } from "@/components/auth/AuthProvider"
+import { db } from "@/lib/firebase"
+import { doc, getDoc } from "firebase/firestore"
 
 interface UserProfile {
-  username: string;
-  photoURL: string;
+  joinedCommunities?: string[];
 }
 
 export default function Navbar() {
   const { user } = useAuth();
-  const router = useRouter();
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -25,64 +20,71 @@ export default function Navbar() {
         const userDocRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userDocRef);
         if(userDoc.exists()) {
-          setUserProfile(userDoc.data() as UserProfile);
+          setProfile(userDoc.data() as UserProfile);
+        } else {
+          setProfile(null);
         }
-      } else {
-        setUserProfile(null);
-      }
-    };
-
-    fetchUserProfile();
+      };
+      fetchUserProfile();
+    }
   }, [user]);
 
-  const handleLogout = async () => {
-    await signOut(auth);
-    router.push('/login');
-  };
-
-  return (
-        <nav className="sticky top-0 z-50 w-full bg-white/80 shadow-md backdrop-blur-md">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <div className="flex-shrink-0">
-            <Link href="/" className="font-['--font-heading'] text-2xl font-bold text-accent-primary">
-              Cucina
+  const loggedinLinks = (
+    <>
+      <Link href="/" className="nav-link">Home</Link>
+      <Link href="/c/create" className="nav-link">Create Community</Link>
+      <div className="mt-4">
+        <h3 className="px-4 mb-2 text-xs font-bold uppercase text-gray-500">Your Communities</h3>
+        <div className="flex flex-col">
+          {profile?.joinedCommunities?.map(communityId => (
+            <Link key={communityId} href={`/c/${communityId}`} className="community-link">
+              {communityId}
             </Link>
-          </div>
-          <div className="flex items-center space-x-4">
-            {user && userProfile ? (
-              // --- Logged-in user view ---
-              <>
-                <button
-                  onClick={handleLogout}
-                  className="rounded-md px-3 py-2 text-sm font-medium text-[--color-text-primary] hover:bg-gray-100"
-                >
-                  Log Out
-                </button>
-                <Link href={`/profile/${userProfile.username}`}>
-                  <Image
-                    src={userProfile.photoURL || `https://ui-avatars.com/api/?name=${userProfile.username || 'User'}&size=128&background=F7F5F2&color=3D3D3D`}
-                    alt="Your Profile"
-                    width={40}
-                    height={40}
-                    className="h-10 w-10 rounded-full object-cover"
-                  />
-                </Link>
-              </>
-            ) : (
-              // --- Logged-out user view ---
-              <>
-                <Link href="/login" className="rounded-md px-3 py-2 text-sm font-medium text-[--color-text-primary] hover:bg-gray-100">
-                  Log In
-                </Link>
-                <Link href="/signup" className="rounded-md bg-[--color-accent-primary] px-4 py-2 text-sm font-bold text-white transition hover:opacity-90">
-                  Sign Up
-                </Link>
-              </>
-            )}
-          </div>
+          ))}
         </div>
       </div>
-    </nav>
+    </>
+  );
+
+  const loggedOutLinks = (
+    <div className="flex flex-col space-y-2">
+       <Link href="/login" className="nav-link">Log In</Link>
+       <Link href="/signup" className="rounded-md bg-[--color-accent-primary] px-4 py-2 text-center font-bold text-white transition hover:opacity-90">
+          Sign Up
+        </Link>
+    </div>
+  );
+
+  return (
+    <>
+      {/* for desktop */}
+      <aside className="hidden md:block w-64 flex-shrink-0 border-r border-border">
+        <nav className="flex flex-col">
+          {user ? loggedinLinks : loggedOutLinks}
+        </nav>
+      </aside>
+
+      {/* mobile */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-border flex justify-around items-center h-16">
+        {user ? (
+          <>
+            <Link href="/" className="mobile-nav-link">Home</Link>
+            <Link href="/c/create" className="mobile-nav-link">Create</Link>
+            <button className="mobile-nav-link">Communities</button>
+            <Link href="/profile/me" className="mobile-nav-link">Profile</Link>
+          </>
+        ) : (
+          <>
+            <Link href="/login" className="mobile-nav-link">Log In</Link>
+            <Link href="/signup" className="mobile-nav-link font-bold text-[--color-accent-primary]">Sign Up</Link>
+          </>
+        )}
+      </nav>
+
+      <div className="pb-16 md:pb-0"/>
+    </>
+    
   )
+
+
 }
