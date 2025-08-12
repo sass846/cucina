@@ -30,26 +30,42 @@ export async function GET(request: Request) {
         postsQuery = postsQuery.orderBy("createdAt", "desc");
         break;
       case "hot":
-        postsQuery = postsQuery
-          .orderBy("peakHotnessScore", "desc")
-          .orderBy("createdAt", "desc");
+        if (mode === "community") {
+          postsQuery = postsQuery.orderBy("createdAt", "desc");
+        } else {
+          postsQuery = postsQuery
+            .orderBy("peakHotnessScore", "desc")
+            .orderBy("createdAt", "desc");
+        }
         break;
       case "trending":
         //TODO: UPDATE IT WITH CURRENT HOTNESS SCORE
-        postsQuery = postsQuery
-          .orderBy("peakHotnessScore", "desc")
-          .orderBy("createdAt", "desc");
+        if (mode === "community") {
+          postsQuery = postsQuery.orderBy("createdAt", "desc");
+        } else {
+          postsQuery = postsQuery
+            .orderBy("peakHotnessScore", "desc")
+            .orderBy("createdAt", "desc");
+        }
         break;
       case "top":
-        postsQuery = postsQuery
-          .orderBy("likesCount", "desc")
-          .orderBy("createdAt", "desc");
+        if (mode === "community") {
+          postsQuery = postsQuery.orderBy("createdAt", "desc");
+        } else {
+          postsQuery = postsQuery
+            .orderBy("likesCount", "desc")
+            .orderBy("createdAt", "desc");
+        }
         break;
       default:
         //TODO: DEFAULT IS HOT
-        postsQuery = postsQuery
-          .orderBy("peakHotnessScore", "desc")
-          .orderBy("createdAt", "desc");
+        if (mode === "community") {
+          postsQuery = postsQuery.orderBy("createdAt", "desc");
+        } else {
+          postsQuery = postsQuery
+            .orderBy("peakHotnessScore", "desc")
+            .orderBy("createdAt", "desc");
+        }
         break;
     }
 

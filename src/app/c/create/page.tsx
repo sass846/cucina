@@ -91,7 +91,7 @@ export default function CreateCommunityPage() {
     return (
       <div className="mx-auto max-w-2xl py-12 px-4">
         <div className="rounded-xl bg-white p-8 shadow-lg">
-          <h1 className="mb-2 font-['--font-heading'] text-3xl font-bold">
+          <h1 className="mb-2 font-font-heading text-3xl font-bold">
             Create a Community
           </h1>
           <p className="mb-8 text-sm text-[--color-text-primary]/70">
@@ -109,11 +109,11 @@ export default function CreateCommunityPage() {
                 value={name}
                 onChange={handleNameChange}
                 placeholder="e.g., sourdough_bakers"
-                className="w-full rounded-md border-[--color-border] p-3 shadow-sm focus:border-[--color-accent-primary] focus:ring-[--color-accent-primary]"
+                className="w-full rounded-md border-border p-3 shadow-sm focus:border-accent-primary focus:ring-accent-primary"
                 required
                 maxLength={25}
               />
-              <p className="mt-1 text-xs text-[--color-text-primary]/60">Lowercase letters, numbers, and underscores only. This will be part of the URL.</p>
+              <p className="mt-1 text-xs text-text-primary/60">Lowercase letters, numbers, and underscores only. This will be part of the URL.</p>
             </div>
 
             <div className="mb-6">
@@ -125,7 +125,7 @@ export default function CreateCommunityPage() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={4}
-                className="w-full rounded-md border-[--color-border] p-3 shadow-sm focus:border-[--color-accent-primary] focus:ring-[--color-accent-primary]"
+                className="w-full rounded-md border-border p-3 shadow-sm focus:border-accent-primary focus:ring-accent-primary"
                 placeholder="What is this community about?"
                 required
               />

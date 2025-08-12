@@ -29,62 +29,43 @@ export default function Navbar() {
     }
   }, [user]);
 
-  const loggedinLinks = (
+  const loggedInView = (
     <>
-      <Link href="/" className="nav-link">Home</Link>
-      <Link href="/c/create" className="nav-link">Create Community</Link>
-      <div className="mt-4">
-        <h3 className="px-4 mb-2 text-xs font-bold uppercase text-gray-500">Your Communities</h3>
+      <div className="flex flex-col space-y-2">
+        <Link href="/" className="font-bold text-lg p-3 rounded-lg hover:bg-gray-100 transition">Home</Link>
+        <Link href="/c/create" className="p-3 rounded-lg bg-accent-primary hover:opacity-90 transition">Create Community</Link>
+      </div>
+      <div className="mt-6">
+        <h3 className="px-3 mb-2 text-xs font-bold uppercase text-gray-500">Your Communities</h3>
         <div className="flex flex-col">
           {profile?.joinedCommunities?.map(communityId => (
-            <Link key={communityId} href={`/c/${communityId}`} className="community-link">
-              {communityId}
+            <Link key={communityId} href={`/c/${communityId}`} className="p-3 rounded-lg hover:bg-gray-100 transition text-sm">
+              /c/{communityId}
             </Link>
           ))}
+           {(!profile?.joinedCommunities || profile.joinedCommunities.length === 0) && (
+            <p className="px-3 text-sm text-gray-400">Join a community to see it here!</p>
+           )}
         </div>
       </div>
     </>
   );
 
-  const loggedOutLinks = (
+  const loggedOutView = (
     <div className="flex flex-col space-y-2">
-       <Link href="/login" className="nav-link">Log In</Link>
-       <Link href="/signup" className="rounded-md bg-[--color-accent-primary] px-4 py-2 text-center font-bold text-white transition hover:opacity-90">
+       <Link href="/login" className="font-bold text-lg p-3 rounded-lg hover:bg-gray-100 transition">Log In</Link>
+       <Link href="/signup" className="rounded-lg bg-accent-primary px-4 py-3 text-center font-bold text-white transition hover:opacity-90">
           Sign Up
         </Link>
     </div>
   );
 
   return (
-    <>
-      {/* for desktop */}
-      <aside className="hidden md:block w-64 flex-shrink-0 border-r border-border">
-        <nav className="flex flex-col">
-          {user ? loggedinLinks : loggedOutLinks}
-        </nav>
-      </aside>
-
-      {/* mobile */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-border flex justify-around items-center h-16">
-        {user ? (
-          <>
-            <Link href="/" className="mobile-nav-link">Home</Link>
-            <Link href="/c/create" className="mobile-nav-link">Create</Link>
-            <button className="mobile-nav-link">Communities</button>
-            <Link href="/profile/me" className="mobile-nav-link">Profile</Link>
-          </>
-        ) : (
-          <>
-            <Link href="/login" className="mobile-nav-link">Log In</Link>
-            <Link href="/signup" className="mobile-nav-link font-bold text-[--color-accent-primary]">Sign Up</Link>
-          </>
-        )}
+    // This sidebar will be hidden on mobile and visible on desktop
+    <aside className="hidden md:block w-64 flex-shrink-0 border-r border-border p-4">
+      <nav className="sticky top-20 flex flex-col">
+        {user ? loggedInView : loggedOutView}
       </nav>
-
-      <div className="pb-16 md:pb-0"/>
-    </>
-    
-  )
-
-
+    </aside>
+  );
 }

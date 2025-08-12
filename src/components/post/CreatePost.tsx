@@ -53,7 +53,7 @@ function CreatePostModal({ onClose } : { onClose: () => void}) {
         if(userDoc.exists() && userDoc.data().joinedCommunities){
           const userCommunities = userDoc.data().joinedCommunities;
           setCommunities(userCommunities);
-          if(userCommunities.length()>0){
+          if(userCommunities.length>0){
             setSelectedCommunity(userCommunities[0]);
           }
         }
@@ -99,7 +99,7 @@ function CreatePostModal({ onClose } : { onClose: () => void}) {
         formData.append('image', postImage);
       }
 
-      const response = await fetch('api/posts/create', {
+      const response = await fetch('/api/posts/create', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

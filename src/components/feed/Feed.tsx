@@ -35,7 +35,11 @@ export default function Feed({ fetchMode, communityId, userId }: FeedProps) {
 
     try {
       const response = await fetch(`/api/feed?${params.toString()}`);
-      if(!response.ok) throw new Error('Failed to fetch posts');
+      if(!response.ok){
+        const errorText = await response.text();
+        console.error('Feed fetch error: ', response.status, errorText);
+        throw new Error(`Failed to fetch posts: ${response.status} ${errorText}`);
+      } 
 
       const data = await response.json();
 
