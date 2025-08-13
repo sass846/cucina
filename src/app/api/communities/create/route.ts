@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import admin from "@/lib/firebaseAdmin";
+import { db, admin } from "@/lib/firebaseAdmin";
 import { getFirestore } from "firebase-admin/firestore";
 
 export async function POST(request: Request) {
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const db = getFirestore();
+    // const db = getFirestore();
 
     //check unique name
     const communityRef = db.collection("communities").doc(name);

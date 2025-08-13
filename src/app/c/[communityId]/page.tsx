@@ -1,6 +1,7 @@
-import admin from "@/lib/firebaseAdmin";
+import { admin } from "@/lib/firebaseAdmin";
 import { notFound } from "next/navigation";
-import Feed from '@/components/feed/Feed'
+import Feed from '@/components/feed/Feed';
+import JoinLeaveButton from "@/components/communities/JoinLeaveButton";
 
 interface CommunityPageProps {
   params : {
@@ -32,6 +33,9 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
           {communityData?.description}
         </p>
         {/* We can add a Join/Leave button here later */}
+        <div className="flex-shrink-0">
+          <JoinLeaveButton communityId={communityId} />
+        </div>
       </div>
 
       {/* Placeholder for the interactive feed component */}

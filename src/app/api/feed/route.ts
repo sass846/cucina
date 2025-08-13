@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import admin from "@/lib/firebaseAdmin";
-import { getFirestore } from "firebase-admin/firestore";
+import { db, admin } from "@/lib/firebaseAdmin";
+// import { getFirestore } from "firebase-admin/firestore";
 
 export async function GET(request: Request) {
   try {
@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     const cursor = searchParams.get("cursor");
 
     //connect to db and filter query
-    const db = getFirestore();
+    // const db = getFirestore();
     let postsQuery: admin.firestore.Query = db.collection("posts");
 
     if (mode === "community") {

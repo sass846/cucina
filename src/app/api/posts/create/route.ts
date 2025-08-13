@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import admin from "@/lib/firebaseAdmin";
+import { db, admin } from "@/lib/firebaseAdmin";
 import { getFirestore } from "firebase-admin/firestore";
 import { getStorage } from "firebase-admin/storage";
 
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
     }
 
     //save the new post document to firestore
-    const db = getFirestore();
+    // const db = getFirestore();
     const postRef = db.collection("posts").doc();
 
     const newPost = {
